@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+</head>
+
+<body class="page">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 62.5%;
+            height: 100%;
+        }
+
+        .page {
+            font-family: "Arial", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-size: 1.4rem;
+            min-width: 32rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form-wrapper {
+            max-width: calc(40rem + 3.2rem);
+            margin: 0 auto;
+        }
+
+        .login-form__title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form {
+            padding: 2rem;
+            border-radius: 1rem;
+            background-color: #f9f9f9;
+            margin: 0 1.6rem;
+        }
+
+        .form-input {
+            outline: none;
+            display: inline-block;
+            width: 100%;
+            padding: 1.3rem 2rem;
+            font-size: 1.6rem;
+            border: 1px solid #000E4B;
+            border-radius: .4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input::placeholder {
+            color: #000E4B;
+        }
+
+        .form-input:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .form-button {
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            background-color: #f1f1f1;
+            color: #476582;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: .4rem;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-button--primary {
+            background-color: #33a06f;
+            color: #fff;
+        }
+
+        .login-form__submit {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 15rem;
+            width: 100%;
+        }
+    </style>
+
+    <div class="login-form-wrapper">
+        <h2 class="login-form__title">Войти в личный кабинет</h2>
+        <form class="login-form">
+            <input class="form-input" id="username" type="text" placeholder="Логин" autofocus>
+            <input class="form-input" id="password" type="password" placeholder="Пароль">
+            <button class="form-button form-button--primary login-form__submit" id="submit">Войти</button>
+        </form>
+    </div>
+
+    <script>
+        const form = {
+            username: document.getElementById('username'),
+            password: document.getElementById('password')
+        };
+
+        const submitButton = document.getElementById('submit');
+
+        submitButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+
+            Object.keys(form).forEach(input => {
+                formData.append(input, form[input].value)
+            });
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.status !== 200) {
+                    return alert('Что-то пошло не так!');
+                }
+
+                const data = await response.json();
+                console.log(data);
+            } catch(e) {
+                console.warn(`Error message: ${e}`)
+                alert('Что-то пошло не так!')
+            }
+        });
+
+    </script>
+</body>
+
+</html>
